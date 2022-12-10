@@ -1,4 +1,5 @@
 import express, { json } from "express";
+import boardcampRoutes from "./routes/boardcamp.routes.js";
 import cors from "cors";
 import dayjs from "dayjs";
 import bcrypt from "bcrypt";
@@ -8,6 +9,7 @@ import { v4 as uuidV4 } from "uuid";
 
 const app = express();
 app.use(express.json());
+app.use(boardcampRoutes);
 app.use(cors());
 dotenv.config();
 
