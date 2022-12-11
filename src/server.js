@@ -1,7 +1,6 @@
 import express, { json } from "express";
 import boardcampRoutes from "./routes/boardcamp.routes.js";
 import cors from "cors";
-import dayjs from "dayjs";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import joi from "joi";
