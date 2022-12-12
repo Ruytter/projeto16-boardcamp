@@ -1,12 +1,17 @@
 import express, { json } from "express";
-import boardcampRoutes from "./routes/boardcamp.routes.js";
+import categoriesRoutes from "./routes/categories.routes.js";
+import customersRoutes from "./routes/customers.routes.js"
+import gamesRoutes from "./routes/games.routes.js"
+import rentalsRoutes from "./routes/rentals.routes.js"
 import cors from "cors";
 import dotenv from "dotenv";
-import joi from "joi";
 
 const app = express();
 app.use(express.json());
-app.use(boardcampRoutes);
+app.use(categoriesRoutes);
+app.use(customersRoutes);
+app.use(gamesRoutes);
+app.use(rentalsRoutes);
 app.use(cors());
 dotenv.config();
 

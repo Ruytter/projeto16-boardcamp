@@ -24,7 +24,7 @@ export async function insertCategory(req, res) {
       res.status(409);
     }
 
-    await connection.query("INSERT INTO categories (nome) VALUES ($1);", [
+    await connection.query("INSERT INTO categories (name) VALUES ($1);", [
       name,
     ]);
     res.sendStatus(201);
