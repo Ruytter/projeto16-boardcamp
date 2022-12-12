@@ -32,24 +32,22 @@ export async function getGameByName(req, res) {
 export async function insertGame(req, res) {
   const { name, image, stockTotal, categoryId, pricePerDay } = req.body;
   try {
-    const { rows } = await connection.query(
+    const category = await connection.query(
       "SELECT * FROM categories WHERE id=$1;",
       [categoryId]
     );
-
     if (
-      rows.length !== 0 ||
+      category.rows.length === 0 ||
       name.length === 0 ||
       pricePerDay <= 0 ||
       stockTotal <= 0
     ) {
-      return res.status(400);
+      return res.sendStatus(400);
     }
 
-    rows = await connection.query("SELECT * FROM games WHERE name=$1;", [name]);
-
-    if (rows.length !== 0) {
-      return res.status(409);
+    const game = await connection.query("SELECT * FROM games WHERE name=$1;", [name]);
+    if (game.rows.length !== 0) {
+      return res.sendStatus(409);
     }
 
     await connection.query(

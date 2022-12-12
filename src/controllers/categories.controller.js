@@ -12,16 +12,17 @@ export async function getCategories(req, res) {
 export async function insertCategory(req, res) {
   const { name } = req.body;
   if (name.length === 0) {
-    return res.status(400);
+    return res.sendStatus(400);
   }
   try {
     const { rows } = await connection.query(
       "SELECT * FROM categories WHERE name=$1;",
       [name]
     );
-
+    
     if (rows.length !== 0) {
-      res.status(409);
+     res.sendStatus(409);
+     return
     }
 
     await connection.query("INSERT INTO categories (name) VALUES ($1);", [
