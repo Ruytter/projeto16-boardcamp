@@ -4,9 +4,9 @@ import { getRentals, insertRental, insertReturnRent, deleteRentalById } from "..
 
 const router = Router();
 
-router.get(" /rentals", getRentals);
+router.get("/rentals", getRentals);
 router.post("/rentals", insertRental);
-router.post(" /rentals/:id/return", insertReturnRent);
+router.post("/rentals/:id/return", insertReturnRent);
 router.delete("/rentals/:id", deleteRentalById);
 
 

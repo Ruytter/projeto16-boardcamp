@@ -1,7 +1,15 @@
 import { connection } from "../database/database.js";
 
 export async function getCustomers(req, res) {
+  const { cpf } = req.query;
   try {
+    if (cpf!==undefined){
+      const { rows } = await connection.query(
+        "SELECT * FROM customers WHERE cpf LIKE $1;",
+        [cpf+"%"]
+            );
+      return res.send(rows);
+    }
     const { rows } = await connection.query("SELECT * FROM customers;");
     res.send(rows);
   } catch (err) {
@@ -9,30 +17,11 @@ export async function getCustomers(req, res) {
   }
 }
 
-export async function getCustomersByCpf(req, res) {
-  const { cpf } = req.params;
-
-  try {
-    const { rows } = await connection.query(
-      "SELECT * FROM games WHERE name LIKE $1%;",
-      [cpf]
-    );
-
-    if (rows.length === 0) {
-      return res.status(404);
-    }
-
-    res.send(rows[0]);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-}
-
 export async function getCustomerById(req, res) {
   const { id } = req.params;
-
+  console.log(id)
   try {
-    const { rows } = await connectionDB.query(
+    const { rows } = await connection.query(
       "SELECT * FROM customers WHERE id=$1;",
       [id]
     );
@@ -66,7 +55,7 @@ export async function insertCostumer(req, res) {
     );
 
     if (rows.length !== 0) {
-      return res.status(409);
+      return res.sendStatus(409);
     }
 
     await connection.query(
@@ -82,6 +71,7 @@ export async function insertCostumer(req, res) {
 export async function updateCostumer(req, res) {
   const { name, phone, cpf, birthday } = req.body;
   const { id } = req.params;
+  console.log(id)
   if (
     (isNaN(cpf) && cpf.length !== 11) ||
     isNaN(phone) ||

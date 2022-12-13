@@ -1,29 +1,18 @@
 import { connection } from "../database/database.js";
 
 export async function getGames(req, res) {
+  let { name } = req.query;
+  name = name[0].toUpperCase() + name.substr(1)
   try {
+    if (name!==undefined){
+      const { rows } = await connection.query(
+        "SELECT * FROM games WHERE name LIKE $1;",
+        [name+"%"]
+            );
+      return res.send(rows);
+    }
     const { rows } = await connection.query("SELECT * FROM games;");
     res.send(rows);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-}
-
-export async function getGameByName(req, res) {
-  const { name } = req.params;
-  name = name.toUpperCase();
-
-  try {
-    const { rows } = await connection.query(
-      "SELECT * FROM games WHERE name LIKE $1%;",
-      [name]
-    );
-
-    if (rows.length === 0) {
-      return res.status(404);
-    }
-
-    res.send(rows[0]);
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -37,7 +26,7 @@ export async function insertGame(req, res) {
       [categoryId]
     );
     if (
-      category.rows.length === 0 ||
+      category.rows.length !== 0 ||
       name.length === 0 ||
       pricePerDay <= 0 ||
       stockTotal <= 0
